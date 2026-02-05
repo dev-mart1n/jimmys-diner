@@ -1,7 +1,7 @@
 const menuArray = [
   {
     name: "Pizza",
-    ingredients: ["pepperoni", "mushrom", "mozarella"],
+    ingredients: ["pepperoni", "mushroom", "mozzarella"],
     id: 0,
     price: 14,
     emoji: "🍕",
