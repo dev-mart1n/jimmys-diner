@@ -16,7 +16,31 @@
     </header>
 
     <section id="menu"></section>
+
     <section id="order-summary"></section>
+
+    <section id="payment-modal">
+        <h3>Enter card details</h3>
+        <form>
+            <label>Name
+                <input type="text" id="name" name="name" placeholder="Enter your name" required>
+            </label>
+
+            <label>Card number
+                <input type="text" id="card-number" name="card-number" placeholder="Enter your card number" required>
+            </label>
+
+            <label>Expiry date
+                <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
+            </label>
+
+            <label>CVV
+                <input type="number" id="cvv" name="cvv" placeholder="Enter CVV" required>
+            </label>
+
+            <button type="submit">Pay</button>
+        </form>
+    </section>
 </body>
 
 </html>
