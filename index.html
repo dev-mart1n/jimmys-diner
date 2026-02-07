@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jimmy's Diner</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="data.js" defer></script>
     <script src="script.js" defer></script>
 </head>
@@ -19,7 +20,7 @@
 
     <section id="order-summary"></section>
 
-    <section id="payment-modal">
+    <section id="payment-modal" class="hidden">
         <h3>Enter card details</h3>
         <form>
             <label>Name
@@ -38,7 +39,7 @@
                 <input type="number" id="cvv" name="cvv" placeholder="Enter CVV" required>
             </label>
 
-            <button type="submit">Pay</button>
+            <button id="pay-btn" type="submit">Pay</button>
         </form>
     </section>
 </body>

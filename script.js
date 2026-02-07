@@ -1,5 +1,7 @@
-const menu = document.getElementById("menu");
-const orderSummary = document.getElementById("order-summary");
+const menu = document.querySelector("#menu");
+const orderSummary = document.querySelector("#order-summary");
+const paymentModal = document.querySelector("#payment-modal");
+const payBtn = document.querySelector("#pay-btn");
 
 let cartItems = [];
 
@@ -17,7 +19,7 @@ menuArray.forEach((item) => {
     `,
   );
 
-  document.getElementById(`btn-${item.id}`).addEventListener("click", () => {
+  document.querySelector(`#btn-${item.id}`).addEventListener("click", () => {
     cartItems.push(item);
     renderOrderSummary();
   });
@@ -38,7 +40,7 @@ const renderOrderSummary = () => {
     `,
     );
 
-    document.getElementById(`remove-${index}`).addEventListener("click", () => {
+    document.querySelector(`#remove-${index}`).addEventListener("click", () => {
       cartItems.splice(index, 1);
       renderOrderSummary();
     });
@@ -55,4 +57,9 @@ const renderOrderSummary = () => {
       </button>
     `,
   );
+
+  const completeOrderBtn = document.querySelector(".complete-order");
+  completeOrderBtn.addEventListener("click", () => {
+    paymentModal.classList.remove("hidden");
+  });
 };
