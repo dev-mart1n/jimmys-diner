@@ -43,4 +43,16 @@ const renderOrderSummary = () => {
       renderOrderSummary();
     });
   });
+
+  const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+  orderSummary.insertAdjacentHTML("beforeend", `<p>Total price: $${total}</p>`);
+
+  orderSummary.insertAdjacentHTML(
+    "beforeend",
+    `
+      <button class="complete-order">Complete order
+      </button>
+    `,
+  );
 };
