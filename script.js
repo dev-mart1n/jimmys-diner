@@ -63,3 +63,21 @@ const renderOrderSummary = () => {
     paymentModal.classList.remove("hidden");
   });
 };
+
+payBtn.addEventListener("click", (e) => {
+  e.preventDefault();
+
+  const customerName = document.querySelector("#name").value;
+
+  paymentModal.classList.add("hidden");
+  cartItems = [];
+  renderOrderSummary();
+
+  const successMessage = document.querySelector("#success-message");
+
+  successMessage.insertAdjacentHTML(
+    "beforeend",
+    `<p>Thanks, ${customerName}! Your order is on its way!</p>`,
+  );
+  successMessage.classList.remove("hidden");
+});
