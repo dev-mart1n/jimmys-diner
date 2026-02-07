@@ -26,17 +26,21 @@ menuArray.forEach((item) => {
 const renderOrderSummary = () => {
   orderSummary.innerHTML = "";
 
-  cartItems.forEach((item) => {
+  cartItems.forEach((item, index) => {
     orderSummary.insertAdjacentHTML(
       "beforeend",
       `
-        <div class="order-item">
-          <h3>${item.name}</h3>
-          <button id="remove-${item.id}">remove</button>
-
-          <p>Price: $${item.price}</p>
-        </div>
-      `,
+      <div class="order-item">
+        <h3>${item.name}</h3>
+        <button id="remove-${index}">remove</button>
+        <p>Price: $${item.price}</p>
+      </div>
+    `,
     );
+
+    document.getElementById(`remove-${index}`).addEventListener("click", () => {
+      cartItems.splice(index, 1);
+      renderOrderSummary();
+    });
   });
 };
