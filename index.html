@@ -6,14 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jimmy's Diner</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Smythe&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <script src="data.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
 <body>
-    <header>
-        <h1>Jimmy's Diner</h1>
-        <p>The best burgers and pizzas in town.</p>
+    <header class="bg-[url(/images/header-bg.png)] bg-cover text-white p-8">
+        <h1 class="text-3xl">Jimmy's Diner</h1>
+        <h3>The best burgers and pizzas in town.</h3>
     </header>
 
     <section id="menu"></section>
