@@ -73,6 +73,16 @@ payBtn.addEventListener("click", (e) => {
   cartItems = [];
   renderOrderSummary();
 
+  const name = document.querySelector("#name").value;
+  const cardNumber = document.querySelector("#card-number").value;
+  const expiryDate = document.querySelector("#expiry-date").value;
+  const cvv = document.querySelector("#cvv").value;
+
+  if (name === "" || cardNumber === "" || expiryDate === "" || cvv === "") {
+    alert("Please fill in all payment details.");
+    return;
+  }
+
   const successMessage = document.querySelector("#success-message");
 
   successMessage.insertAdjacentHTML(
