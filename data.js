@@ -8,7 +8,7 @@ const menuArray = [
   },
   {
     name: "Hamburger",
-    ingredients: ["beef", "cheese", "lettuce"],
+    ingredients: ["tomato", "cheese", "beef", "lettuce"],
     price: 12,
     image: "/images/items/burger.png",
     id: 1,
