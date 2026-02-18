@@ -1,13 +1,13 @@
-// Select DOM elements for menu, order summary, payment modal, and pay button
+// Select DOM elements
 const menu = document.querySelector("#menu");
 const orderSummary = document.querySelector("#order-summary");
 const paymentModal = document.querySelector("#payment-modal");
-const paymentForm = document.querySelector("#payment-modal form");
+const payBtn = document.querySelector("#pay-btn");
 
 // Array to store items added to the cart
 let cartItems = [];
 
-// Loop through the menu items and display them on the page
+// Loop through menu items and render them
 menuArray.forEach((item) => {
   menu.insertAdjacentHTML(
     "beforeend",
@@ -32,7 +32,7 @@ menuArray.forEach((item) => {
   `,
   );
 
-  // Add click event to "+" button to add item to cart and update order summary
+  // Add item to cart on click
   document.querySelector(`#btn-${item.id}`).addEventListener("click", () => {
     cartItems.push(item);
     renderOrderSummary();
@@ -56,7 +56,6 @@ const renderOrderSummary = () => {
     `<h3 class="text-center text-3xl text-neutral-900 leading-none py-8">Your order</h3>`,
   );
 
-  // Group items by ID for quantity
   const summaryMap = {};
   cartItems.forEach((item) => {
     if (summaryMap[item.id]) {
@@ -66,7 +65,6 @@ const renderOrderSummary = () => {
     }
   });
 
-  // Container for cart items
   const itemsContainer = document.createElement("div");
   itemsContainer.className = "w-[90%] mx-auto flex flex-col gap-4";
   orderSummary.appendChild(itemsContainer);
@@ -86,7 +84,6 @@ const renderOrderSummary = () => {
 
     itemsContainer.appendChild(itemDiv);
 
-    // Remove one quantity or full item
     document.querySelector(`#remove-${index}`).addEventListener("click", () => {
       if (item.quantity > 1) {
         item.quantity -= 1;
@@ -101,7 +98,6 @@ const renderOrderSummary = () => {
     });
   });
 
-  // Total price container with border
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
   const totalContainer = document.createElement("div");
   totalContainer.className =
@@ -112,7 +108,6 @@ const renderOrderSummary = () => {
   `;
   orderSummary.appendChild(totalContainer);
 
-  // Complete order button
   orderSummary.insertAdjacentHTML(
     "beforeend",
     `
@@ -124,59 +119,67 @@ const renderOrderSummary = () => {
     `,
   );
 
-  // Open modal in center with overlay and block background scrolling
   const completeOrderBtn = document.querySelector(".complete-order");
   completeOrderBtn.addEventListener("click", () => {
+    // Show modal centered with overlay
     paymentModal.classList.remove("hidden");
-    document.body.classList.add("overflow-hidden"); // block scrolling
-
-    // Add overlay background if not already there
-    if (!document.querySelector("#modal-overlay")) {
-      const overlay = document.createElement("div");
-      overlay.id = "modal-overlay";
-      overlay.className = "fixed inset-0 bg-black/50 z-40";
-      document.body.appendChild(overlay);
-    }
-    paymentModal.classList.add(
-      "fixed",
-      "inset-0",
-      "z-50",
-      "flex",
-      "justify-center",
-      "items-center",
-    );
+    document.body.style.overflow = "hidden"; // prevent background scrolling
   });
 };
 
-// Handle payment form submission for all devices
-paymentForm.addEventListener("submit", (e) => {
-  e.preventDefault(); // prevent page reload
+// Handle payment form submission
+payBtn.addEventListener("click", (e) => {
+  e.preventDefault();
 
-  const name = document.querySelector("#name").value;
-  const cardNumber = document.querySelector("#card-number").value;
-  const expiryDate = document.querySelector("#expiry-date").value;
-  const cvv = document.querySelector("#cvv").value;
+  const form = payBtn.closest("form");
+  const nameField = form.querySelector("#name");
+  const cardField = form.querySelector("#card-number");
+  const expiryField = form.querySelector("#expiry-date");
+  const cvvField = form.querySelector("#cvv");
 
-  if (!name || !cardNumber || !expiryDate || !cvv) {
-    alert("Please fill in all payment details.");
-    return;
+  // Remove any previous error messages
+  let existingError = form.querySelector(".form-error");
+  if (existingError) existingError.remove();
+
+  // Highlight empty fields
+  const fields = [nameField, cardField, expiryField, cvvField];
+  const emptyFields = fields.filter((f) => !f.value.trim());
+
+  if (emptyFields.length > 0) {
+    // Show single error message at top of form, left-aligned
+    const errorMsg = document.createElement("p");
+    errorMsg.className = "form-error text-red-600 text-left !font-sans text-sm";
+    errorMsg.textContent = "Please fill out all fields";
+    form.prepend(errorMsg);
+
+    // Highlight empty fields
+    emptyFields.forEach((field) => {
+      field.classList.add("border-red-500");
+    });
+
+    // Remove red highlight on input
+    fields.forEach((field) => {
+      field.addEventListener("input", () => {
+        field.classList.remove("border-red-500");
+        if (form.querySelectorAll(".border-red-500").length === 0) {
+          errorMsg.remove();
+        }
+      });
+    });
+
+    return; // stop submission
   }
 
-  const customerName = name;
+  const customerName = nameField.value;
 
-  // Hide modal and overlay, restore scrolling
+  // Hide modal and reset
   paymentModal.classList.add("hidden");
-  const overlay = document.querySelector("#modal-overlay");
-  if (overlay) overlay.remove();
-  document.body.classList.remove("overflow-hidden");
-
+  document.body.style.overflow = ""; // restore scrolling
   cartItems = [];
   renderOrderSummary();
 
+  // Show success message
   const successMessage = document.querySelector("#success-message");
-  successMessage.insertAdjacentHTML(
-    "beforeend",
-    `<p>Thanks, ${customerName}! Your order is on its way!</p>`,
-  );
+  successMessage.innerHTML = `<p>Thanks, ${customerName}! Your order is on its way!</p>`;
   successMessage.classList.remove("hidden");
 });
