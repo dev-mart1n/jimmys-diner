@@ -134,6 +134,8 @@ const renderOrderSummary = () => {
   const completeOrderBtn = document.querySelector(".complete-order");
   completeOrderBtn.addEventListener("click", () => {
     paymentModal.classList.remove("hidden");
+    // Block background scrolling
+    document.body.classList.add("overflow-hidden");
   });
 };
 
@@ -145,6 +147,7 @@ payBtn.addEventListener("click", (e) => {
 
   // Hide modal and clear cart
   paymentModal.classList.add("hidden");
+  document.body.classList.remove("overflow-hidden"); // restore scrolling
   cartItems = [];
   renderOrderSummary();
 
