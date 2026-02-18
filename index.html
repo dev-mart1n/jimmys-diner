@@ -5,48 +5,80 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jimmy's Diner</title>
+    <!-- TailwindCSS via CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Smythe&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="styles.css">
+    <!-- Data and main JS -->
     <script src="data.js" defer></script>
     <script src="script.js" defer></script>
 </head>
 
 <body>
+    <!-- Header with background image and title -->
     <header class="bg-[url(/images/header-bg.png)] bg-cover text-white p-8">
         <h1 class="text-3xl">Jimmy's Diner</h1>
         <h3>The best burgers and pizzas in town.</h3>
     </header>
 
+    <!-- Menu section: dynamically filled via JS -->
     <section id="menu"></section>
 
+    <!-- Order summary section: dynamically updated via JS -->
     <section id="order-summary"></section>
 
+    <!-- Payment modal: hidden by default -->
     <section id="payment-modal" class="hidden">
-        <h3>Enter card details</h3>
-        <form>
-            <label>Name
-                <input type="text" id="name" name="name" placeholder="Enter your name" required>
-            </label>
+        <!-- Modal content container -->
+        <div class="w-[90%] mx-auto md:w-[400px] bg-white p-6 rounded-lg shadow-lg flex flex-col items-center gap-6">
+            <!-- Modal title -->
+            <div class="text-2xl font-bold tracking-wider text-center text-neutral-900">Enter card details</div>
 
-            <label>Card number
-                <input type="text" id="card-number" name="card-number" placeholder="Enter your card number" required>
-            </label>
+            <!-- Payment form -->
+            <form class="w-full flex flex-col">
+                <!-- Top spacing before first input -->
+                <div class="mt-4"></div>
 
-            <label>Expiry date
-                <input type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
-            </label>
+                <!-- Name input -->
+                <label>
+                    <input
+                        class="w-full p-3 border border-neutral-300 rounded text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
+                        type="text" id="name" name="name" placeholder="Enter your name" required>
+                </label>
 
-            <label>CVV
-                <input type="number" id="cvv" name="cvv" placeholder="Enter CVV" required>
-            </label>
+                <!-- Card number input -->
+                <label>
+                    <input
+                        class="w-full p-3 border border-neutral-300 rounded text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
+                        type="text" id="card-number" name="card-number" placeholder="Enter your card number" required>
+                </label>
 
-            <button id="pay-btn" type="submit">Pay</button>
-        </form>
+                <!-- Expiry date input -->
+                <label>
+                    <input
+                        class="w-full p-3 border border-neutral-300 rounded text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-400 mb-4"
+                        type="text" id="expiry-date" name="expiry-date" placeholder="MM/YY" required>
+                </label>
+
+                <!-- CVV input -->
+                <label>
+                    <input
+                        class="w-full p-3 border border-neutral-300 rounded text-neutral-900 focus:outline-none focus:ring-2 focus:ring-green-400 mb-8"
+                        type="number" id="cvv" name="cvv" placeholder="Enter CVV" required>
+                </label>
+
+                <!-- Pay button -->
+                <button class="text-xl bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white cursor-pointer"
+                    id="pay-btn" type="submit">Pay</button>
+            </form>
+        </div>
     </section>
 
+    <!-- Success message section: shown after successful payment -->
     <section id="success-message" class="hidden"></section>
 </body>
 
