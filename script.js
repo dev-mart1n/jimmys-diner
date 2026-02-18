@@ -4,10 +4,10 @@ const orderSummary = document.querySelector("#order-summary");
 const paymentModal = document.querySelector("#payment-modal");
 const payBtn = document.querySelector("#pay-btn");
 
-// Array to store items added to the cart
+// Array to store cart items
 let cartItems = [];
 
-// Loop through menu items and render them
+// Render menu
 menuArray.forEach((item) => {
   menu.insertAdjacentHTML(
     "beforeend",
@@ -22,24 +22,19 @@ menuArray.forEach((item) => {
             <p class="text-2xl text-neutral-700 mt-2 leading-6">$${item.price}</p>
           </div>
         </div>
-        <button 
-          id="btn-${item.id}"
-          class="w-11 h-11 rounded-full border border-neutral-300 text-xl flex items-center justify-center hover:bg-neutral-100 transition cursor-pointer">
-          +
-        </button>
+        <button id="btn-${item.id}" class="w-11 h-11 rounded-full border border-neutral-300 text-xl flex items-center justify-center hover:bg-neutral-100 transition cursor-pointer">+</button>
       </div>
     </div>
   `,
   );
 
-  // Add item to cart on click
   document.querySelector(`#btn-${item.id}`).addEventListener("click", () => {
     cartItems.push(item);
     renderOrderSummary();
   });
 });
 
-// Function to render the order summary with grouped items
+// Render order summary
 const renderOrderSummary = () => {
   orderSummary.innerHTML = "";
 
@@ -58,11 +53,8 @@ const renderOrderSummary = () => {
 
   const summaryMap = {};
   cartItems.forEach((item) => {
-    if (summaryMap[item.id]) {
-      summaryMap[item.id].quantity += 1;
-    } else {
-      summaryMap[item.id] = { ...item, quantity: 1 };
-    }
+    if (summaryMap[item.id]) summaryMap[item.id].quantity += 1;
+    else summaryMap[item.id] = { ...item, quantity: 1 };
   });
 
   const itemsContainer = document.createElement("div");
@@ -72,7 +64,6 @@ const renderOrderSummary = () => {
   Object.values(summaryMap).forEach((item, index) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "flex items-center justify-between";
-
     itemDiv.innerHTML = `
       <div class="flex gap-4 items-center">
         <span class="text-2xl text-neutral-700 font-semibold">${item.quantity}x</span>
@@ -81,18 +72,17 @@ const renderOrderSummary = () => {
       </div>
       <p class="text-2xl text-neutral-700">$${item.price * item.quantity}</p>
     `;
-
     itemsContainer.appendChild(itemDiv);
 
     document.querySelector(`#remove-${index}`).addEventListener("click", () => {
       if (item.quantity > 1) {
         item.quantity -= 1;
         cartItems.splice(
-          cartItems.findIndex((cartItem) => cartItem.id === item.id),
+          cartItems.findIndex((ci) => ci.id === item.id),
           1,
         );
       } else {
-        cartItems = cartItems.filter((cartItem) => cartItem.id !== item.id);
+        cartItems = cartItems.filter((ci) => ci.id !== item.id);
       }
       renderOrderSummary();
     });
@@ -112,76 +102,63 @@ const renderOrderSummary = () => {
     "beforeend",
     `
     <div class="flex justify-center w-[90%] mx-auto mt-6 pb-8">
-      <button class="complete-order bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white cursor-pointer">
-        Complete order
-      </button>
+      <button class="complete-order bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white cursor-pointer">Complete order</button>
     </div>
-    `,
+  `,
   );
 
-  const completeOrderBtn = document.querySelector(".complete-order");
-  completeOrderBtn.addEventListener("click", () => {
-    // Show modal centered with overlay
+  document.querySelector(".complete-order").addEventListener("click", () => {
     paymentModal.classList.remove("hidden");
-    document.body.style.overflow = "hidden"; // prevent background scrolling
+    document.body.style.overflow = "hidden";
   });
 };
 
-// Handle payment form submission
+// Payment form handling
 payBtn.addEventListener("click", (e) => {
   e.preventDefault();
-
   const form = payBtn.closest("form");
   const nameField = form.querySelector("#name");
   const cardField = form.querySelector("#card-number");
   const expiryField = form.querySelector("#expiry-date");
   const cvvField = form.querySelector("#cvv");
 
-  // Remove any previous error messages
-  let existingError = form.querySelector(".form-error");
+  const existingError = form.querySelector(".form-error");
   if (existingError) existingError.remove();
 
-  // Highlight empty fields
   const fields = [nameField, cardField, expiryField, cvvField];
   const emptyFields = fields.filter((f) => !f.value.trim());
 
   if (emptyFields.length > 0) {
-    // Show single error message at top of form, left-aligned
     const errorMsg = document.createElement("p");
-    errorMsg.className = "form-error text-red-600 text-left !font-sans text-sm";
+    errorMsg.className = "form-error text-red-600 text-left font-sans text-sm";
     errorMsg.textContent = "Please fill out all fields";
     form.prepend(errorMsg);
 
-    // Highlight empty fields
-    emptyFields.forEach((field) => {
-      field.classList.add("border-red-500");
-    });
-
-    // Remove red highlight on input
+    emptyFields.forEach((field) => field.classList.add("border-red-500"));
     fields.forEach((field) => {
       field.addEventListener("input", () => {
         field.classList.remove("border-red-500");
-        if (form.querySelectorAll(".border-red-500").length === 0) {
-          errorMsg.remove();
-        }
+        if (!form.querySelector(".border-red-500")) errorMsg.remove();
       });
     });
-
-    return; // stop submission
+    return;
   }
 
   const customerName = nameField.value;
 
-  // Hide modal and reset
   paymentModal.classList.add("hidden");
-  document.body.style.overflow = ""; // restore scrolling
+  document.body.style.overflow = "";
   cartItems = [];
   renderOrderSummary();
 
-  // Show success message
   const successMessage = document.querySelector("#success-message");
-  successMessage.innerHTML = `<p>Thanks, ${customerName}! Your order is on its way!</p>`;
+  successMessage.innerHTML = `
+  <div class="px-6 w-[90%] mx-auto mt-12">
+    <div class="text-center text-[28px] text-green-900 bg-green-100 px-8 py-8 rounded-md tracking-[0.05em]" style="font-family: 'Smythe', serif;">
+      <span class="inline-block">Thanks, ${customerName}! Your order is on its way!</span>
+    </div>
+  </div>
+  `;
   successMessage.classList.remove("hidden");
-
   orderSummary.innerHTML = "";
 });
