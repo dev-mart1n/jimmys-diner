@@ -24,7 +24,7 @@ menuArray.forEach((item) => {
         </div>
         <button 
           id="btn-${item.id}"
-          class="w-11 h-11 rounded-full border border-neutral-300 text-xl flex items-center justify-center hover:bg-neutral-100 transition">
+          class="w-11 h-11 rounded-full border border-neutral-300 text-xl flex items-center justify-center hover:bg-neutral-100 transition cursor-pointer">
           +
         </button>
       </div>
@@ -83,7 +83,7 @@ const renderOrderSummary = () => {
       <div class="flex gap-4 items-center">
         <span class="text-2xl text-neutral-700 font-semibold">${item.quantity}x</span>
         <h4 class="text-3xl text-neutral-900 leading-none">${item.name}</h4>
-        <button class="text-xs text-neutral-400 hover:text-red-500 active:text-red-600" id="remove-${index}">remove</button>
+        <button class="text-xs text-neutral-400 hover:text-red-500 active:text-red-600 cursor-pointer" id="remove-${index}">remove</button>
       </div>
       <p class="text-2xl text-neutral-700">$${item.price * item.quantity}</p>
     `;
@@ -123,7 +123,7 @@ const renderOrderSummary = () => {
     "beforeend",
     `
     <div class="flex justify-center w-[90%] mx-auto mt-6 pb-8">
-      <button class="complete-order bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white">
+      <button class="complete-order bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white cursor-pointer">
         Complete order
       </button>
     </div>
