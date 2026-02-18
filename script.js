@@ -9,14 +9,29 @@ menuArray.forEach((item) => {
   menu.insertAdjacentHTML(
     "beforeend",
     `
-      <div class="menu-item">
-        <span>${item.emoji}</span>
-        <h3>${item.name}</h3>
-        <p>${item.ingredients.join(", ")}</p>
-        <p>Price: $${item.price}</p>
-        <button id="btn-${item.id}">+</button>
+    <div class="px-6">
+      
+      <div class="flex items-start justify-between border-b border-neutral-200 mx-auto w-[90%] py-9 pb-7">
+        
+        <div class="flex items-start gap-8">
+          <img src="${item.image}" alt="${item.name}" class="w-22 h-22 object-contain">
+          
+          <div class="flex flex-col leading-snug">
+            <h3 class="text-3xl text-neutral-900 leading-none">${item.name}</h3>
+            <p class="text-md text-neutral-400 mt-1 leading-6">${item.ingredients.join(", ")}</p>
+            <p class="text-2xl text-neutral-700 mt-2 leading-6">$${item.price}</p>
+          </div>
+        </div>
+
+        <button 
+          id="btn-${item.id}"
+          class="w-11 h-11 rounded-full border border-neutral-300 text-xl flex items-center justify-center hover:bg-neutral-100 transition">
+          +
+        </button>
+
       </div>
-    `,
+    </div>
+  `,
   );
 
   document.querySelector(`#btn-${item.id}`).addEventListener("click", () => {
@@ -32,10 +47,11 @@ const renderOrderSummary = () => {
     orderSummary.insertAdjacentHTML(
       "beforeend",
       `
-      <div class="order-item">
+      <div class="">
+        <h3 class="text-center">Your order</h3>
         <h3>${item.name}</h3>
         <button id="remove-${index}">remove</button>
-        <p>Price: $${item.price}</p>
+        <p>$${item.price}</p>
       </div>
     `,
     );
@@ -48,13 +64,19 @@ const renderOrderSummary = () => {
 
   const total = cartItems.reduce((sum, item) => sum + item.price, 0);
 
-  orderSummary.insertAdjacentHTML("beforeend", `<p>Total price: $${total}</p>`);
+  orderSummary.insertAdjacentHTML(
+    "beforeend",
+    `<h2>Total price: $${total}</h2>`,
+  );
 
   orderSummary.insertAdjacentHTML(
     "beforeend",
     `
-      <button class="complete-order">Complete order
+    <div class="flex justify-center">
+      <button class="complete-order bg-[#16DB99] w-[90%] py-3 px-4 rounded font-bold text-white">
+        Complete order
       </button>
+    </div>
     `,
   );
 
