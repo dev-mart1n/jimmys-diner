@@ -1,13 +1,10 @@
-// Select DOM elements
 const menu = document.querySelector("#menu");
 const orderSummary = document.querySelector("#order-summary");
 const paymentModal = document.querySelector("#payment-modal");
 const payBtn = document.querySelector("#pay-btn");
 
-// Array to store cart items
 let cartItems = [];
 
-// Render menu
 menuArray.forEach((item) => {
   menu.insertAdjacentHTML(
     "beforeend",
@@ -34,7 +31,6 @@ menuArray.forEach((item) => {
   });
 });
 
-// Render order summary
 const renderOrderSummary = () => {
   orderSummary.innerHTML = "";
 
@@ -113,7 +109,6 @@ const renderOrderSummary = () => {
   });
 };
 
-// Payment form handling
 payBtn.addEventListener("click", (e) => {
   e.preventDefault();
   const form = payBtn.closest("form");
@@ -130,7 +125,8 @@ payBtn.addEventListener("click", (e) => {
 
   if (emptyFields.length > 0) {
     const errorMsg = document.createElement("p");
-    errorMsg.className = "form-error text-red-600 text-left font-sans text-sm";
+    errorMsg.className = "form-error text-red-600 text-left text-sm";
+    errorMsg.style.fontFamily = "sans-serif";
     errorMsg.textContent = "Please fill out all fields";
     form.prepend(errorMsg);
 
@@ -144,8 +140,63 @@ payBtn.addEventListener("click", (e) => {
     return;
   }
 
-  const customerName = nameField.value;
+  let hasError = false;
+  const errorMsg = document.createElement("p");
+  errorMsg.className = "form-error text-red-600 text-left text-sm";
+  errorMsg.style.fontFamily = "sans-serif";
 
+  if (!/^\d{16}$/.test(cardField.value.trim())) {
+    errorMsg.textContent = "Card number must be 16-digits";
+    cardField.classList.add("border-red-500");
+    hasError = true;
+  }
+
+  let month, year;
+  const expiry = expiryField.value.replace(/\s/g, "");
+  if (expiry.includes("/")) {
+    [month, year] = expiry.split("/").map((v) => parseInt(v));
+  } else if (expiry.length === 4) {
+    month = parseInt(expiry.slice(0, 2));
+    year = parseInt(expiry.slice(2, 4));
+  } else {
+    month = year = 0;
+  }
+
+  const now = new Date();
+  const currentMonth = now.getMonth() + 1;
+  const currentYear = now.getFullYear() % 100;
+
+  if (
+    !month ||
+    !year ||
+    month < 1 ||
+    month > 12 ||
+    year < currentYear ||
+    (year === currentYear && month < currentMonth)
+  ) {
+    if (!hasError) errorMsg.textContent = "Card must be valid and not expired";
+    expiryField.classList.add("border-red-500");
+    hasError = true;
+  }
+
+  if (!/^\d{3}$/.test(cvvField.value.trim())) {
+    if (!hasError) errorMsg.textContent = "CVV must be 3 digits";
+    cvvField.classList.add("border-red-500");
+    hasError = true;
+  }
+
+  if (hasError) {
+    form.prepend(errorMsg);
+    fields.forEach((field) => {
+      field.addEventListener("input", () => {
+        field.classList.remove("border-red-500");
+        if (!form.querySelector(".border-red-500")) errorMsg.remove();
+      });
+    });
+    return;
+  }
+
+  const customerName = nameField.value;
   paymentModal.classList.add("hidden");
   document.body.style.overflow = "";
   cartItems = [];
