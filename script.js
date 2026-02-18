@@ -182,4 +182,6 @@ payBtn.addEventListener("click", (e) => {
   const successMessage = document.querySelector("#success-message");
   successMessage.innerHTML = `<p>Thanks, ${customerName}! Your order is on its way!</p>`;
   successMessage.classList.remove("hidden");
+
+  orderSummary.innerHTML = "";
 });
