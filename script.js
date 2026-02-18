@@ -72,7 +72,7 @@ const renderOrderSummary = () => {
     itemDiv.innerHTML = `
       <div class="flex gap-4 items-center">
         <h4 class="text-3xl text-neutral-900 leading-none">${item.name}</h4>
-        <button class="text-xs text-neutral-400" id="remove-${index}">remove</button>
+        <button class="text-xs text-neutral-400 hover:text-red-500 active:text-red-600" id="remove-${index}">remove</button>
       </div>
       <p class="text-2xl text-neutral-700">$${item.price}</p>
     `;
@@ -104,7 +104,7 @@ const renderOrderSummary = () => {
     "beforeend",
     `
     <div class="flex justify-center w-[90%] mx-auto mt-6 pb-8">
-      <button class="complete-order bg-[#16DB99] w-full py-3 px-4 rounded font-bold text-white">
+      <button class="complete-order bg-[#16DB99] w-full py-4 px-4 rounded font-bold text-white">
         Complete order
       </button>
     </div>
