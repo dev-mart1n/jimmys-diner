@@ -39,7 +39,7 @@ menuArray.forEach((item) => {
   });
 });
 
-// Function to render the order summary
+// Function to render the order summary with grouped items
 const renderOrderSummary = () => {
   // Clear the previous order summary
   orderSummary.innerHTML = "";
@@ -59,29 +59,48 @@ const renderOrderSummary = () => {
     `<h3 class="text-center text-3xl text-neutral-900 leading-none py-8">Your order</h3>`,
   );
 
+  // Create a summary map to group items by ID
+  const summaryMap = {};
+  cartItems.forEach((item) => {
+    if (summaryMap[item.id]) {
+      summaryMap[item.id].quantity += 1;
+    } else {
+      summaryMap[item.id] = { ...item, quantity: 1 };
+    }
+  });
+
   // Container for all cart items
   const itemsContainer = document.createElement("div");
   itemsContainer.className = "w-[90%] mx-auto flex flex-col gap-4";
   orderSummary.appendChild(itemsContainer);
 
-  // Loop through cart items and display each item
-  cartItems.forEach((item, index) => {
+  // Loop through grouped items and render each
+  Object.values(summaryMap).forEach((item, index) => {
     const itemDiv = document.createElement("div");
     itemDiv.className = "flex items-center justify-between";
 
     itemDiv.innerHTML = `
       <div class="flex gap-4 items-center">
+        <span class="text-2xl text-neutral-700 font-semibold">${item.quantity}x</span>
         <h4 class="text-3xl text-neutral-900 leading-none">${item.name}</h4>
         <button class="text-xs text-neutral-400 hover:text-red-500 active:text-red-600" id="remove-${index}">remove</button>
       </div>
-      <p class="text-2xl text-neutral-700">$${item.price}</p>
+      <p class="text-2xl text-neutral-700">$${item.price * item.quantity}</p>
     `;
 
     itemsContainer.appendChild(itemDiv);
 
-    // Remove item from cart when "remove" button is clicked
+    // Remove one quantity of the item, or remove completely if quantity is 1
     document.querySelector(`#remove-${index}`).addEventListener("click", () => {
-      cartItems.splice(index, 1);
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+        cartItems.splice(
+          cartItems.findIndex((cartItem) => cartItem.id === item.id),
+          1,
+        );
+      } else {
+        cartItems = cartItems.filter((cartItem) => cartItem.id !== item.id);
+      }
       renderOrderSummary();
     });
   });
